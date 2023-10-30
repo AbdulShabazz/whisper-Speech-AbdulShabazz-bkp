@@ -1,7 +1,7 @@
 '''Generate log mel spectrogram from .WAV audio file'''
 import audio as whisper_audio
 import numpy as np
-import mapplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 import torch
 
 # returns a numpy array of the audio file of float32 type
