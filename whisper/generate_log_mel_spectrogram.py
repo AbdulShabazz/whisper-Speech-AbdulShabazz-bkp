@@ -3,30 +3,24 @@ import audio as whisper_audio
 import matplotlib.pyplot as plt
 import torch
 import numpy as np
-
 import wave
 
-with wave.open("combined_sine_waves.wav", 'r') as audio_file_np_array_float32:
-    sampling_rate = audio_file_np_array_float32.getframerate()
-    audio_data = audio_file_np_array_float32.readframes(-1)
-    audio_data = np.frombuffer(audio_data, dtype=np.int16).astype(np.float32)
+# returns a numpy array of the audio file of float32 type
+audio_data_np_array_float32 = whisper_audio.load_audio_basic("combined_sine_waves.wav")
 
-    # returns a numpy array of the audio file of float32 type
-    #audio_file_np_array_float32 = whisper_audio.load_audio("combined_sine_waves.wav", 44100)
+# returns a torch tensor that contains the log mel spectrogram of the audio file
+audio_file_log_mel_spectrogram_torch_tensor = whisper_audio.log_mel_spectrogram(audio_data_np_array_float32, n_mels=80, padding=0, device=None)
 
-    # returns a torch tensor that contains the log mel spectrogram of the audio file
-    audio_file_log_mel_spectrogram_torch_tensor = whisper_audio.log_mel_spectrogram(audio_data, n_mels=80, padding=0, device=None)
+plt.figure(figsize=(10, 4))
 
-    plt.figure(figsize=(10, 4))
+# Display Log-Mel Spectrogram
+plt.imshow(audio_file_log_mel_spectrogram_torch_tensor, aspect="auto", cmap="inferno", origin="lower")
+plt.colorbar(format="%+2.0f dB")
+plt.title("Log-Mel Spectrogram")
+plt.xlabel("Time (s)")
+plt.ylabel("Mel-frequency bins")
 
-    # Display Log-Mel Spectrogram
-    plt.imshow(audio_file_log_mel_spectrogram_torch_tensor, aspect="auto", cmap="inferno", origin="lower")
-    plt.colorbar(format="%+2.0f dB")
-    plt.title("Log-Mel Spectrogram")
-    plt.xlabel("Time (s)")
-    plt.ylabel("Mel-frequency bins")
-
-    # Show Plot
-    plt.tight_layout()
-    plt.show()
+# Show Plot
+plt.tight_layout()
+plt.show()
 
